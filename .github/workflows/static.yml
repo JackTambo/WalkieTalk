@@ -29,15 +29,31 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'  # Or any other version you need
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build static content
+        run: |
+          npm run build  # Replace with your build command if necessary (e.g., next build)
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload the folder where your built static files are
+          path: './build'  # Adjust this path to match your build output folder (e.g., ./dist, ./out)
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
